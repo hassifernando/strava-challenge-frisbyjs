@@ -46,49 +46,52 @@ const generateAccessToken = () => {
  * @param {object} [data=null] - The request data for POST or PUT method.
  * @returns {Promise<Response>} A promise that resolves with the response of the request.
  */
-const makeApiRequest = async (endpoint, method = 'GET', data = null) => {
-          const accessToken = await generateAccessToken();
-          const url = `https://www.strava.com/api/v3/${endpoint}`;
-          const headers = {
-                    Authorization: `Bearer ${accessToken}`,
-          };
-          let request;
-          switch (method) {
-                    case 'GET':
-                              request = frisby.get(url, {
-                                        headers: {
-                                                  Authorization: `Bearer ${accessToken}`,
-                                                  'Content-Type':
-                                                            'application/json',
-                                        },
-                              });
-                              break;
-                    case 'POST':
-                              request = frisby.post(url, {
-                                        headers: {
-                                                  Authorization: `Bearer ${accessToken}`,
-                                                  'Content-Type':
-                                                            'application/json',
-                                        },
-                                        body: JSON.stringify(data),
-                              });
-                              break;
-                    case 'PUT':
-                              request = frisby.put(url, {
-                                        headers: {
-                                                  Authorization: `Bearer ${accessToken}`,
-                                                  'Content-Type':
-                                                            'application/json',
-                                        },
-                                        body: JSON.stringify(data),
-                              });
-                              break;
-                    default:
-                              throw new Error(
-                                        `Unsupported HTTP method: ${method}`
-                              );
-          }
-          return request;
+const makeApiRequest = (endpoint, method = 'GET', data = null) => {
+          return generateAccessToken().then((accessToken) => {
+                    const url = `https://www.strava.com/api/v3/${endpoint}`;
+                    const headers = {
+                              Authorization: `Bearer ${accessToken}`,
+                    };
+
+                    let request;
+                    switch (method) {
+                              case 'GET':
+                                        request = frisby.get(url, {
+                                                  headers: {
+                                                            Authorization: `Bearer ${accessToken}`,
+                                                            'Content-Type':
+                                                                      'application/json',
+                                                  },
+                                        });
+                                        break;
+                              case 'POST':
+                                        request = frisby.post(url, {
+                                                  headers: {
+                                                            Authorization: `Bearer ${accessToken}`,
+                                                            'Content-Type':
+                                                                      'application/json',
+                                                  },
+                                                  body: JSON.stringify(data),
+                                        });
+                                        break;
+                              case 'PUT':
+                                        request = frisby.put(url, {
+                                                  headers: {
+                                                            Authorization: `Bearer ${accessToken}`,
+                                                            'Content-Type':
+                                                                      'application/json',
+                                                  },
+                                                  body: JSON.stringify(data),
+                                        });
+                                        break;
+                              default:
+                                        throw new Error(
+                                                  `Unsupported HTTP method: ${method}`
+                                        );
+                    }
+
+                    return request;
+          });
 };
 /**
  * Function to create an activity.
