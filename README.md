@@ -77,6 +77,8 @@ The test runner will execute all the test cases in the `__tests__` directory and
 
 The test cases cover the following scenarios:
 
+### Activities Endpoint
+
 1. **Create Activity**
 
 -   _Description_: Verifies that a new activity can be successfully created.
@@ -189,7 +191,120 @@ The test cases cover the following scenarios:
         -   For the valid `per_page`, the response should have a status code of 200 (OK).
         -   For the invalid `per_page`, the response should have a status code of 400 (Bad Request) and include error information.
 
+### Athlete Endpoint
 
+1.  **Retrieve Athlete Data:**
+    
+    -   Description: Verifies that athlete data can be retrieved.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athlete` endpoint.
+    -   Expected Outcome:
+        -   The response should have a status code of 200 (OK).
+        -   The response data should include the following fields:
+            -   `id`, `username`, `resource_state`, `firstname`, `lastname`, `bio`, `city`, `state`, `country`, `sex`, `premium`, `summit`, `created_at`, `updated_at`, `badge_type_id`, `weight`, `profile_medium`, `profile`, `friend`, `follower`.
+        -   The data types of the fields should be as follows:
+            -   `id`: number
+            -   `username`: string
+            -   `resource_state`: number
+            -   `firstname`: string
+            -   `lastname`: string
+            -   `bio`: string or null
+            -   `city`: string
+            -   `state`: string
+            -   `country`: string
+            -   `sex`: string
+            -   `premium`: boolean
+            -   `summit`: boolean
+            -   `created_at`: string
+            -   `updated_at`: string
+            -   `badge_type_id`: number
+            -   `weight`: number
+            -   `profile_medium`: string
+            -   `profile`: string
+            -   `friend`: string or null
+            -   `follower`: string or null
+2.  **Verify Specific Field Values:**
+    
+    -   Description: Verifies that specific fields in the athlete data have the expected values.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athlete` endpoint.
+    -   Expected Outcome:
+        -   The value of the `username` field should match the value from the `STRAVA_USERNAME` environment variable.
+        -   The value of the `city` field should match the value from the `STRAVA_CITY` environment variable.
+3.  **Athlete Authorization:**
+    
+    -   Description: Verifies that unauthorized access to athlete data returns a 401 (Unauthorized) status.
+    -   Steps:
+        -   Make a GET request to the `athlete` endpoint without providing an access token.
+    -   Expected Outcome:
+        -   The response should have a status code of 401 (Unauthorized).
+4.  **Athlete Authentication with Invalid Token:**
+    
+    -   Description: Verifies that accessing the athlete endpoint with an invalid access token returns a 401 (Unauthorized) status.
+    -   Steps:
+        -   Make a GET request to the `athlete` endpoint with an invalid access token in the `Authorization` header.
+    -   Expected Outcome:
+        -   The response should have a status code of 401 (Unauthorized).
+5.  **Athlete Security:**
+    
+    -   Description: Verifies that the response does not include sensitive information.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athlete` endpoint.
+    -   Expected Outcome:
+        -   The response data should not include the following sensitive fields:
+            -   `access_token`, `refresh_token`, `password`, `email`, `credit_card`, `social_security_number`, `bank_account_number`.
+
+### Athlete/stats Endpoint
+
+1.  **Retrieve Athlete Stats:**
+    
+    -   Description: Verifies that athlete stats can be retrieved.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athletes/{athlete_id}/stats` endpoint.
+    -   Expected Outcome:
+        -   The response should have a status code of 200 (OK).
+        -   The response data should include the following fields:
+            -   `biggest_ride_distance`, `biggest_climb_elevation_gain`, `recent_ride_totals`, `recent_run_totals`, `recent_swim_totals`, `ytd_ride_totals`, `ytd_run_totals`, `ytd_swim_totals`, `all_ride_totals`, `all_run_totals`, `all_swim_totals`.
+        -   The data types of the fields should be as follows:
+            -   `biggest_ride_distance`: number (float)
+            -   `recent_ride_totals`: object
+            -   `recent_run_totals`: object
+            -   `recent_swim_totals`: object
+            -   `ytd_ride_totals`: object
+            -   `ytd_run_totals`: object
+            -   `ytd_swim_totals`: object
+            -   `all_ride_totals`: object
+            -   `all_run_totals`: object
+            -   `all_swim_totals`: object
+2.  **Verify Specific Field Values in Athlete Stats:**
+    
+    -   Description: Verifies that specific fields in the athlete stats have the expected values.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athletes/{athlete_id}/stats` endpoint.
+    -   Expected Outcome:
+        -   The value of the `biggest_ride_distance` field should be greater than or equal to 0.
+3.  **Athlete Stats Authorization:**
+    
+    -   Description: Verifies that unauthorized access to athlete stats returns a 401 (Unauthorized) status.
+    -   Steps:
+        -   Make a GET request to the `athletes/{athlete_id}/stats` endpoint without providing an access token.
+    -   Expected Outcome:
+        -   The response should have a status code of 401 (Unauthorized).
+4.  **Athlete Stats Authentication with Invalid Token:**
+    
+    -   Description: Verifies that accessing athlete stats with an invalid access token returns a 401 (Unauthorized) status.
+    -   Steps:
+        -   Make a GET request to the `athletes/{athlete_id}/stats` endpoint with an invalid access token in the `Authorization` header.
+    -   Expected Outcome:
+        -   The response should have a status code of 401 (Unauthorized).
+5.  **Athlete Stats Security:**
+    
+    -   Description: Verifies that the response does not include sensitive information.
+    -   Steps:
+        -   Call the `makeApiRequest` function with the `GET` method and the `athletes/{athlete_id}/stats` endpoint.
+    -   Expected Outcome:
+        -   The response data should not include the following sensitive fields:
+            -   `access_token`, `refresh_token`, `password`, `email`, `credit_card`, `social_security_number`, `bank_account_number`.
 
 ## Contributing
 
